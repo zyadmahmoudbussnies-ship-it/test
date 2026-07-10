@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>منصة أ. أمينة | تسجيل الدخول</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <div class="login-shell">
+
+    <!-- الجانب التعريفي بصورة الدكتورة -->
+    <aside class="login-aside">
+      <div class="aside-bg"></div>
+      <img class="teacher-img" src="teacher.jpg" alt="أ. أمينة عبد الحكيم" />
+      <div class="aside-overlay"></div>
+      <div class="aside-content">
+        <div class="brand-badge">⚡ منصة البرمجة والذكاء الاصطناعي</div>
+        <div class="teacher-name">أ. أمينة عبد الحكيم</div>
+        <div class="teacher-title">مهندسة البرمجة — أستاذة مادة البرمجة والذكاء الاصطناعي</div>
+        <div class="tagline">
+          مستقبل طلاب الثانوية يبدأ بالبرمجة والذكاء الاصطناعي 🚀
+        </div>
+        <a class="contact-chip" href="tel:+201061073897">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          للتواصل: <span>01061073897</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- فورم الدخول -->
+    <main class="login-main">
+      <div class="login-card">
+        <span class="eyebrow">أهلاً بيك من جديد</span>
+        <h1>تسجيل الدخول</h1>
+        <p class="subtitle">دخّل اسم المستخدم وكلمة السر اللي معاك</p>
+
+        <div class="login-error" id="errorBox"></div>
+
+        <form id="loginForm">
+          <div class="field">
+            <label for="username">اسم المستخدم</label>
+            <input type="text" id="username" placeholder="مثال: ahmed_2026" autocomplete="username" required />
+          </div>
+          <div class="field">
+            <label for="password">كلمة السر</label>
+            <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" required />
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
+            <span id="loginBtnText">تسجيل الدخول</span>
+          </button>
+        </form>
+
+        <p class="login-foot">
+          نسيت بياناتك؟ تواصل مع أ. أمينة على
+          <a href="tel:+201061073897" style="color:var(--amber);font-weight:700;">01061073897</a>
+        </p>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

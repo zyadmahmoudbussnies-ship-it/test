@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>منصة أ. أمينة | لوحة التحكم</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <div class="center-screen" id="loadingScreen"><div class="spinner"></div></div>
+
+  <div class="app-shell" id="appShell" style="display:none;">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="mark">⚡</span><span>منصة أ. أمينة</span></div>
+      <nav>
+        <button class="nav-link active" id="navVideos" onclick="switchTab('Videos')"><span>🎬</span><span>الفيديوهات</span></button>
+        <button class="nav-link" id="navStudents" onclick="switchTab('Students')"><span>👥</span><span>الطلبة</span></button>
+        <button class="nav-link" id="navAssign" onclick="switchTab('Assign')"><span>🔗</span><span>تعيين الدروس</span></button>
+      </nav>
+      <div class="sidebar-foot">
+        <div class="user-chip">
+          <div class="avatar" style="background:var(--amber-soft);color:var(--amber)">أ</div>
+          <div class="meta">
+            <div class="name">أ. أمينة</div>
+            <div class="role"><span class="badge badge-admin" style="padding:2px 8px;font-size:.68rem;">أدمن</span></div>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-block" onclick="logout()">تسجيل الخروج</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="brand"><span class="mark">⚡</span><span>منصة أ. أمينة</span></div>
+        <button class="icon-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+      </div>
+
+      <!-- Videos Tab -->
+      <section id="tabVideos">
+        <div class="main-header">
+          <div><h1>الفيديوهات</h1><p class="subtitle">أضف الدروس وحدد من يشوفها</p></div>
+          <button class="btn btn-primary" onclick="openAddVideoModal()">+ إضافة درس</button>
+        </div>
+        <div class="panel">
+          <div class="empty-state" id="videosEmpty" style="display:none;">
+            <div class="glyph">🎞️</div><h3>لسه ما أضفتيش دروس</h3>
+            <p>اضغطي "إضافة درس" وهيظهر هنا على طول.</p>
+          </div>
+          <div class="table-wrap" id="videosTableWrap" style="display:none;">
+            <table><thead><tr><th>عنوان الدرس</th><th>الوصف</th><th>تاريخ الإضافة</th><th>إجراءات</th></tr></thead>
+            <tbody id="videosTableBody"></tbody></table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Students Tab -->
+      <section id="tabStudents" style="display:none;">
+        <div class="main-header">
+          <div><h1>الطلبة</h1><p class="subtitle">أضف حسابات وتحكمي في تفعيلها</p></div>
+          <button class="btn btn-primary" onclick="openAddStudentModal()">+ إضافة طالب</button>
+        </div>
+        <div class="panel">
+          <div class="empty-state" id="studentsEmpty" style="display:none;">
+            <div class="glyph">👤</div><h3>لسه ما أضفتيش طلبة</h3>
+            <p>اضغطي "إضافة طالب" لإنشاء حساب جديد.</p>
+          </div>
+          <div class="table-wrap" id="studentsTableWrap" style="display:none;">
+            <table><thead><tr><th>اسم الطالب</th><th>اسم المستخدم</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+            <tbody id="studentsTableBody"></tbody></table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Assign Tab -->
+      <section id="tabAssign" style="display:none;">
+        <div class="main-header">
+          <div><h1>تعيين الدروس</h1><p class="subtitle">اختاري طالب وعيّني له الدروس</p></div>
+        </div>
+        <div class="panel" style="margin-bottom:20px;">
+          <div class="field" style="margin-bottom:0;">
+            <label for="assignStudentSelect">اختاري طالب</label>
+            <select id="assignStudentSelect" onchange="loadStudentAssignments()">
+              <option value="">— اختاري —</option>
+            </select>
+          </div>
+        </div>
+        <div id="assignPanel" style="display:none;">
+          <div class="main-header" style="margin-bottom:14px;">
+            <h2 class="section-title" id="assignPanelTitle">دروس الطالب</h2>
+            <button class="btn btn-primary btn-sm" onclick="openAssignVideoModal()">+ عيّني درس</button>
+          </div>
+          <div class="panel">
+            <div class="empty-state" id="assignEmpty" style="display:none;">
+              <div class="glyph">🔗</div><h3>ما فيش دروس معيّنة</h3>
+              <p>اضغطي "عيّني درس" لتحديد الدروس.</p>
+            </div>
+            <div class="assign-list" id="assignedList"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal: إضافة فيديو -->
+  <div class="modal-backdrop" id="addVideoModal">
+    <div class="modal">
+      <div class="modal-head"><h3>إضافة درس جديد</h3><button class="modal-close" onclick="closeModal('addVideoModal')">✕</button></div>
+      <div class="field"><label>عنوان الدرس *</label><input type="text" id="vTitle" placeholder="مثال: الدرس الأول - المقدمة"/></div>
+      <div class="field"><label>وصف مختصر (اختياري)</label><input type="text" id="vDesc" placeholder="ملخص سريع للدرس..."/></div>
+      <div class="field">
+        <label>رابط الفيديو *</label>
+        <input type="url" id="vUrl" placeholder="https://youtu.be/... أو رابط mp4 أو Google Drive"/>
+        <p class="field-hint">يدعم يوتيوب (shorts كمان)، Google Drive، وروابط mp4 مباشرة</p>
+      </div>
+      <div class="login-error" id="addVideoError" style="display:none;"></div>
+      <button class="btn btn-primary btn-block" id="addVideoBtn" onclick="submitAddVideo()">حفظ الدرس</button>
+    </div>
+  </div>
+
+  <!-- Modal: إضافة طالب -->
+  <div class="modal-backdrop" id="addStudentModal">
+    <div class="modal">
+      <div class="modal-head"><h3>إضافة طالب جديد</h3><button class="modal-close" onclick="closeModal('addStudentModal')">✕</button></div>
+      <div class="field"><label>الاسم للعرض *</label><input type="text" id="sDisplay" placeholder="مثال: أحمد محمد"/></div>
+      <div class="field">
+        <label>اسم المستخدم * (إنجليزي بدون مسافات)</label>
+        <input type="text" id="sUsername" placeholder="ahmed_2026" autocomplete="off"/>
+        <p class="field-hint">هيكون اسم الدخول للطالب</p>
+      </div>
+      <div class="field"><label>كلمة السر * (8 حروف على الأقل)</label><input type="password" id="sPassword" placeholder="••••••••" autocomplete="new-password"/></div>
+      <div class="field" style="display:flex;align-items:center;gap:14px;flex-direction:row-reverse;justify-content:flex-end;">
+        <label style="margin:0;color:var(--text)">تفعيل الحساب فوراً</label>
+        <label class="switch"><input type="checkbox" id="sActive" checked/><span class="slider"></span></label>
+      </div>
+      <div class="login-error" id="addStudentError" style="display:none;"></div>
+      <button class="btn btn-primary btn-block" id="addStudentBtn" onclick="submitAddStudent()">إنشاء الحساب</button>
+    </div>
+  </div>
+
+  <!-- Modal: تعيين فيديو -->
+  <div class="modal-backdrop" id="assignVideoModal">
+    <div class="modal">
+      <div class="modal-head"><h3 id="assignModalTitle">تعيين درس للطالب</h3><button class="modal-close" onclick="closeModal('assignVideoModal')">✕</button></div>
+      <p class="muted" style="font-size:.88rem;margin-bottom:16px;">اختاري الدروس اللي هتظهر للطالب</p>
+      <div class="assign-list" id="assignVideoList"></div>
+      <div class="login-error" id="assignError" style="display:none;margin-top:14px;"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

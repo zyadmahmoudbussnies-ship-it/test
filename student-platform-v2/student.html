@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>منصة أ. أمينة | دروسي</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <div class="center-screen" id="loadingScreen"><div class="spinner"></div></div>
+
+  <div class="app-shell" id="appShell" style="display:none;">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <span class="mark">⚡</span>
+        <span>منصة أ. أمينة</span>
+      </div>
+      <nav>
+        <button class="nav-link active"><span>🎬</span><span>دروسي</span></button>
+      </nav>
+      <div class="sidebar-foot">
+        <div class="user-chip">
+          <div class="avatar" id="avatarInitial">?</div>
+          <div class="meta">
+            <div class="name" id="sideUsername">—</div>
+            <div class="role">طالب</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-block" onclick="logout()">تسجيل الخروج</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="brand"><span class="mark">⚡</span><span>منصة أ. أمينة</span></div>
+        <button class="icon-btn" onclick="logout()">⎋</button>
+      </div>
+      <div class="main-header">
+        <div>
+          <h1>أهلاً <span id="welcomeName">بيك</span> 👋</h1>
+          <p class="subtitle">دي قائمة الدروس المتاحة لك</p>
+        </div>
+        <div id="statusBadge"></div>
+      </div>
+
+      <div class="panel" id="inactivePanel" style="display:none;">
+        <div class="empty-state">
+          <div class="glyph">🔒</div>
+          <h3>حسابك لسه مش مفعّل</h3>
+          <p>تواصل مع أ. أمينة على <strong>01061073897</strong> لتفعيل حسابك.</p>
+        </div>
+      </div>
+      <div class="panel" id="emptyPanel" style="display:none;">
+        <div class="empty-state">
+          <div class="glyph">🎞️</div>
+          <h3>لسه مفيش دروس متاحة ليك</h3>
+          <p>هتظهر هنا أول ما أ. أمينة تضيف درس جديد ليك.</p>
+        </div>
+      </div>
+      <div class="video-grid" id="videoGrid"></div>
+    </main>
+  </div>
+
+  <div class="player-backdrop" id="playerBackdrop">
+    <div class="player-box">
+      <button class="player-close" id="playerClose">✕</button>
+      <div class="ratio" id="playerSlot"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/student.js"></script>
+</body>
+</html>
