@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>منصة أ. أمينة | لوحة التحكم</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="css/style.css"/>
   <link rel="icon" href="data:,">
 </head>
@@ -15,6 +16,7 @@
       <div class="brand"><span class="mark">⚡</span><span>منصة أ. أمينة</span></div>
       <nav>
         <button class="nav-link active" id="navVideos" onclick="switchTab('Videos')"><span>🎬</span><span>الفيديوهات</span></button>
+        <button class="nav-link" id="navMaterials" onclick="switchTab('Materials')"><span>📄</span><span>الملفات</span></button>
         <button class="nav-link" id="navStudents" onclick="switchTab('Students')"><span>👥</span><span>الطلبة</span></button>
         <button class="nav-link" id="navAssign" onclick="switchTab('Assign')"><span>🔗</span><span>تعيين الدروس</span></button>
       </nav>
@@ -33,7 +35,7 @@
     <main class="main">
       <div class="topbar">
         <div class="brand"><span class="mark">⚡</span><span>منصة أ. أمينة</span></div>
-        <button class="icon-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+        <button class="icon-btn" onclick="document.getElementById('sidebar').classList.toggle('open');document.body.classList.toggle('sidebar-open')">☰</button>
       </div>
 
       <!-- Videos Tab -->
@@ -50,6 +52,24 @@
           <div class="table-wrap" id="videosTableWrap" style="display:none;">
             <table><thead><tr><th>عنوان الدرس</th><th>الوصف</th><th>تاريخ الإضافة</th><th>إجراءات</th></tr></thead>
             <tbody id="videosTableBody"></tbody></table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Materials Tab -->
+      <section id="tabMaterials" style="display:none;">
+        <div class="main-header">
+          <div><h1>الملفات</h1><p class="subtitle">ارفعي ملفات PDF أو Word وحددي مين يشوفها</p></div>
+          <button class="btn btn-primary" onclick="openAddMaterialModal()">+ إضافة ملف</button>
+        </div>
+        <div class="panel">
+          <div class="empty-state" id="materialsEmpty" style="display:none;">
+            <div class="glyph">📄</div><h3>لسه ما رفعتيش ملفات</h3>
+            <p>اضغطي "إضافة ملف" وهيظهر هنا على طول.</p>
+          </div>
+          <div class="table-wrap" id="materialsTableWrap" style="display:none;">
+            <table><thead><tr><th>عنوان الملف</th><th>النوع</th><th>تاريخ الإضافة</th><th>إجراءات</th></tr></thead>
+            <tbody id="materialsTableBody"></tbody></table>
           </div>
         </div>
       </section>
@@ -148,8 +168,50 @@
     </div>
   </div>
 
+  <!-- Modal: إضافة ملف -->
+  <div class="modal-backdrop" id="addMaterialModal">
+    <div class="modal">
+      <div class="modal-head"><h3>إضافة ملف جديد</h3><button class="modal-close" onclick="closeModal('addMaterialModal')">✕</button></div>
+      <div class="field"><label>عنوان الملف *</label><input type="text" id="mTitle" placeholder="مثال: مذكرة الوحدة الأولى"/></div>
+      <div class="field"><label>وصف مختصر (اختياري)</label><input type="text" id="mDesc" placeholder="ملخص سريع للملف..."/></div>
+      <div class="field">
+        <label>الملف * (PDF أو Word)</label>
+        <input type="file" id="mFile" accept=".pdf,.doc,.docx"/>
+        <p class="field-hint">صيغ مسموحة: PDF, DOC, DOCX</p>
+      </div>
+      <div class="login-error" id="addMaterialError" style="display:none;"></div>
+      <button class="btn btn-primary btn-block" id="addMaterialBtn" onclick="submitAddMaterial()">رفع وحفظ</button>
+    </div>
+  </div>
+
+  <!-- Modal: تعيين لطلاب متعددين دفعة واحدة -->
+  <div class="modal-backdrop" id="bulkAssignModal">
+    <div class="modal">
+      <div class="modal-head"><h3 id="bulkAssignTitle">تعيين</h3><button class="modal-close" onclick="closeModal('bulkAssignModal')">✕</button></div>
+      <p class="muted" style="font-size:.88rem;margin-bottom:16px;">حددي كل الطلبة اللي هيشوفوا ده — دفعة واحدة</p>
+      <div class="assign-list" id="bulkAssignList"></div>
+      <div class="login-error" id="bulkAssignError" style="display:none;margin-top:14px;"></div>
+      <button class="btn btn-primary btn-block" id="bulkAssignBtn" style="margin-top:18px;" onclick="submitBulkAssign()">حفظ التعيين</button>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabaseClient.js"></script>
   <script src="js/admin.js"></script>
+  <script>
+  (function(){
+    var sb=document.getElementById('sidebar');
+    document.addEventListener('click',function(e){
+      if(sb.classList.contains('open') && !sb.contains(e.target) && !e.target.closest('.icon-btn')){
+        sb.classList.remove('open'); document.body.classList.remove('sidebar-open');
+      }
+    });
+    document.querySelectorAll('.nav-link').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        if(window.innerWidth<768){ sb.classList.remove('open'); document.body.classList.remove('sidebar-open'); }
+      });
+    });
+  })();
+  </script>
 </body>
 </html>
